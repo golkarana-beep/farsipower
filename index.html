@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>کدهای فرمت عددی فارسی</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg1: #f0f7ff;
+    --bg2: #fdf2f8;
+    --bg3: #f0fdf4;
+    --card: rgba(255, 255, 255, 0.72);
+    --text: #1e293b;
+    --muted: #64748b;
+    --purple: #8b5cf6;
+    --blue: #3b82f6;
+    --cyan: #06b6d4;
+    --green: #10b981;
+    --pink: #ec4899;
+    --orange: #f97316;
+    --yellow: #eab308;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Vazirmatn', system-ui, sans-serif;
+    background: linear-gradient(135deg, var(--bg1), var(--bg2), var(--bg3));
+    background-size: 300% 300%;
+    animation: bgShift 18s ease infinite;
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+    line-height: 1.65;
+  }
+
+  @keyframes bgShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  /* Moving soft blobs */
+  .blobs {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(70px);
+    opacity: 0.45;
+    animation: float 22s ease-in-out infinite;
+  }
+
+  .b1 { width: 480px; height: 480px; background: #c4b5fd; top: -120px; right: -80px; }
+  .b2 { width: 420px; height: 420px; background: #93c5fd; bottom: -100px; left: -100px; animation-delay: -6s; }
+  .b3 { width: 320px; height: 320px; background: #f9a8d4; top: 35%; left: 25%; animation-delay: -12s; opacity: 0.35; }
+  .b4 { width: 280px; height: 280px; background: #6ee7b7; top: 15%; right: 20%; animation-delay: -4s; opacity: 0.3; }
+  .b5 { width: 200px; height: 200px; background: #fcd34d; bottom: 20%; right: 30%; animation-delay: -9s; opacity: 0.25; }
+
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(40px, -50px) scale(1.08); }
+    66% { transform: translate(-30px, 30px) scale(0.94); }
+  }
+
+  /* Floating particles */
+  .particle {
+    position: absolute;
+    width: 6px; height: 6px;
+    background: white;
+    border-radius: 50%;
+    opacity: 0.5;
+    animation: rise 12s linear infinite;
+  }
+
+  @keyframes rise {
+    0% { transform: translateY(100vh) scale(0); opacity: 0; }
+    10% { opacity: 0.5; }
+    90% { opacity: 0.4; }
+    100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 18px 90px;
+  }
+
+  /* Header */
+  header {
+    text-align: center;
+    margin-bottom: 36px;
+    animation: fadeDown 0.8s ease both;
+  }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-25px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: white;
+    border: 1px solid #e2e8f0;
+    color: var(--purple);
+    padding: 7px 18px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.1);
+  }
+
+  .badge-dot {
+    width: 8px; height: 8px;
+    background: var(--green);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--green);
+    animation: pulse 2s ease infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.35); opacity: 0.6; }
+  }
+
+  h1 {
+    font-size: clamp(1.9rem, 5vw, 2.7rem);
+    font-weight: 700;
+    background: linear-gradient(90deg, #7c3aed, #2563eb, #db2777);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 1.05rem;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 28px;
+    animation: fadeUp 0.7s ease 0.15s both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .tab-btn {
+    background: white;
+    border: 1px solid #e2e8f0;
+    color: var(--muted);
+    padding: 11px 28px;
+    border-radius: 50px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+  }
+
+  .tab-btn:hover {
+    border-color: #c4b5fd;
+    color: var(--purple);
+    transform: translateY(-2px);
+  }
+
+  .tab-btn.active {
+    background: linear-gradient(135deg, #7c3aed, #6366f1);
+    border-color: transparent;
+    color: white;
+    box-shadow: 0 8px 25px rgba(124, 58, 237, 0.3);
+  }
+
+  /* Filters */
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 28px;
+  }
+
+  .filter-btn {
+    background: white;
+    border: 1px solid #e2e8f0;
+    color: var(--muted);
+    padding: 7px 16px;
+    border-radius: 50px;
+    font-family: inherit;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+
+  .filter-btn:hover { border-color: #a5b4fc; color: var(--blue); }
+  .filter-btn.active {
+    background: #eef2ff;
+    border-color: #a5b4fc;
+    color: #4f46e5;
+    font-weight: 500;
+  }
+
+  /* Cards */
+  .cards {
+    display: grid;
+    gap: 14px;
+  }
+
+  .card {
+    background: var(--card);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.7);
+    border-radius: 18px;
+    padding: 20px 22px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    align-items: center;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.05);
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0;
+    transform: translateY(24px);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 5px; height: 100%;
+    border-radius: 0 18px 18px 0;
+  }
+
+  .card.cat-general::before { background: linear-gradient(180deg, #a78bfa, #8b5cf6); }
+  .card.cat-decimal::before { background: linear-gradient(180deg, #22d3ee, #06b6d4); }
+  .card.cat-percent::before { background: linear-gradient(180deg, #f472b6, #ec4899); }
+  .card.cat-currency::before { background: linear-gradient(180deg, #fbbf24, #f59e0b); }
+  .card.cat-date::before { background: linear-gradient(180deg, #34d399, #10b981); }
+  .card.cat-new::before { background: linear-gradient(180deg, #60a5fa, #3b82f6); }
+  .card.cat-advanced::before { background: linear-gradient(180deg, #fb923c, #f97316); }
+
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 18px 40px rgba(0,0,0,0.09);
+    border-color: rgba(139, 92, 246, 0.25);
+  }
+
+  .card-info { display: flex; flex-direction: column; gap: 9px; }
+
+  .card-top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 9px;
+  }
+
+  .category {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 50px;
+    font-size: 0.76rem;
+    font-weight: 500;
+  }
+
+  .cat-general .category { background: #f3e8ff; color: #7c3aed; }
+  .cat-decimal .category { background: #cffafe; color: #0891b2; }
+  .cat-percent .category { background: #fce7f3; color: #db2777; }
+  .cat-currency .category { background: #fef3c7; color: #d97706; }
+  .cat-date .category { background: #d1fae5; color: #059669; }
+  .cat-new .category { background: #dbeafe; color: #2563eb; }
+  .cat-advanced .category { background: #ffedd5; color: #ea580c; }
+
+  .use {
+    font-size: 0.93rem;
+    font-weight: 500;
+    color: #475569;
+  }
+
+  .example {
+    font-size: 1.15rem;
+    font-weight: 600;
+    direction: ltr;
+    text-align: right;
+  }
+
+  .cat-general .example { color: #7c3aed; }
+  .cat-decimal .example { color: #0891b2; }
+  .cat-percent .example { color: #db2777; }
+  .cat-currency .example { color: #d97706; }
+  .cat-date .example { color: #059669; }
+  .cat-new .example { color: #2563eb; }
+  .cat-advanced .example { color: #ea580c; }
+
+  .code-box {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-family: 'Courier New', Consolas, monospace;
+    font-size: 0.85rem;
+    color: #334155;
+    direction: ltr;
+    text-align: left;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .actions { display: flex; flex-direction: column; align-items: flex-end; }
+
+  .copy-btn {
+    background: linear-gradient(135deg, #7c3aed, #6366f1);
+    color: white;
+    border: none;
+    padding: 11px 20px;
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 0.88rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 14px rgba(124, 58, 237, 0.25);
+    min-width: 100px;
+    justify-content: center;
+  }
+
+  .copy-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 22px rgba(124, 58, 237, 0.35);
+  }
+
+  .copy-btn.copied {
+    background: linear-gradient(135deg, #10b981, #059669);
+    box-shadow: 0 6px 18px rgba(16, 185, 129, 0.3);
+  }
+
+  .copy-btn svg { width: 15px; height: 15px; }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+    padding: 13px 28px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+    z-index: 100;
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+  }
+
+  .toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+
+  .tip {
+    text-align: center;
+    margin-top: 42px;
+    padding: 18px;
+    background: rgba(255,255,255,0.7);
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    color: var(--muted);
+    font-size: 0.9rem;
+    backdrop-filter: blur(8px);
+  }
+
+  .tip strong { color: var(--purple); }
+
+  .section-title {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.05rem;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  .new-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    color: white;
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+
+  @media (max-width: 700px) {
+    .card { grid-template-columns: 1fr; gap: 12px; }
+    .actions { flex-direction: row; justify-content: space-between; width: 100%; }
+    .code-box { font-size: 0.78rem; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="blobs">
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+    <div class="blob b3"></div>
+    <div class="blob b4"></div>
+    <div class="blob b5"></div>
+  </div>
+  <div id="particles"></div>
+
+  <div class="container">
+    <header>
+      <div class="badge">
+        <span class="badge-dot"></span>
+        PowerPoint & Excel
+      </div>
+      <h1>کدهای فرمت عددی فارسی</h1>
+      <p class="subtitle">کدهای سفارشی برای نمایش اعداد فارسی — با یک کلیک کپی کنید</p>
+    </header>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="main">کدهای اصلی</button>
+      <button class="tab-btn" data-tab="new">تازه‌ها <span class="new-badge">جدید</span></button>
+    </div>
+
+    <!-- MAIN TAB -->
+    <div id="tab-main">
+      <div class="filters" id="filters-main">
+        <button class="filter-btn active" data-filter="all">همه</button>
+        <button class="filter-btn" data-filter="عمومی">اعداد عمومی</button>
+        <button class="filter-btn" data-filter="اعشاری">اعداد اعشاری</button>
+        <button class="filter-btn" data-filter="درصد">درصد</button>
+        <button class="filter-btn" data-filter="پول">پول و ارز</button>
+        <button class="filter-btn" data-filter="تاریخ">تاریخ</button>
+      </div>
+      <div class="cards" id="cards-main"></div>
+    </div>
+
+    <!-- NEW TAB -->
+    <div id="tab-new" style="display:none;">
+      <p class="section-title">کدهای جدیدتر و کاربردی‌تر (مناسب Microsoft 365 و نسخه‌های جدید)</p>
+      <div class="cards" id="cards-new"></div>
+    </div>
+
+    <div class="tip">
+      <strong>نکته:</strong> این کدها را در بخش Format Cells → Custom (اکسل) یا Format → Number → Custom (پاورپوینت) وارد کنید.
+    </div>
+  </div>
+
+  <div class="toast" id="toast">کپی شد ✓</div>
+
+  <script>
+    // Particles
+    const particlesEl = document.getElementById('particles');
+    for (let i = 0; i < 18; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      p.style.left = Math.random() * 100 + '%';
+      p.style.animationDelay = (Math.random() * 10) + 's';
+      p.style.animationDuration = (9 + Math.random() * 8) + 's';
+      p.style.width = p.style.height = (3 + Math.random() * 5) + 'px';
+      particlesEl.appendChild(p);
+    }
+
+    // ===== MAIN DATA (original) =====
+    const mainData = [
+      { code: '[$ـ3010000]General', category: 'اعداد عمومی', cat: 'general', use: 'نمایش خودکار اعداد', example: '۱۲۳۴۵ یا 12345' },
+      { code: '[$ـ3010000]#,##0', category: 'اعداد عمومی', cat: 'general', use: 'اعداد با جداکننده هزارگان', example: '۱,۲۳۴,۵۶۷' },
+      { code: '[$ـ3010000]#,##0.00', category: 'اعداد عمومی', cat: 'general', use: 'اعداد اعشاری با جداکننده', example: '۱,۲۳۴.۵۶' },
+      { code: '[$ـ3010000]0.00', category: 'اعداد اعشاری', cat: 'decimal', use: 'اعداد اعشاری ساده', example: '۱۲۳۴.۵۶' },
+      { code: '[$ـ3010000]0.000', category: 'اعداد اعشاری', cat: 'decimal', use: 'اعداد با سه رقم اعشار', example: '۱۲۳۴.۵۶۷' },
+      { code: '[$ـ3010000]0.0000', category: 'اعداد اعشاری', cat: 'decimal', use: 'اعداد با چهار رقم اعشار', example: '۱۲۳۴.۵۶۷۸' },
+      { code: '[$ـ3010000]0%', category: 'درصد', cat: 'percent', use: 'درصد بدون اعشار', example: '۹۸٪' },
+      { code: '[$ـ3010000]0.00%', category: 'درصد', cat: 'percent', use: 'درصد با دو رقم اعشار', example: '۹۸.۵۰٪' },
+      { code: '[$ـ3010000]0.000%', category: 'درصد', cat: 'percent', use: 'درصد با سه رقم اعشار', example: '۹۸.۵۰۰٪' },
+      { code: '[$ـ3010000]#,##0 "ریال"', category: 'پول و ارز', cat: 'currency', use: 'اعداد با واحد ریال', example: '۱,۲۳۴,۵۶۷ ریال' },
+      { code: '[$ـ3010000]"ریال" #,##0', category: 'پول و ارز', cat: 'currency', use: 'اعداد با علامت ریال', example: 'ریال ۱,۲۳۴,۵۶۷' },
+      { code: '[$ـ3010000]#,##0 "تومان"', category: 'پول و ارز', cat: 'currency', use: 'اعداد با واحد تومان', example: '۱,۲۳۴,۵۶۷ تومان' },
+      { code: '[$ـ3010000]yyyy/mm/dd', category: 'تاریخ', cat: 'date', use: 'تاریخ عددی', example: '۱۴۰۳/۰۵/۱۵' },
+      { code: '[$ـ3010000]d mmmm yyyy', category: 'تاریخ', cat: 'date', use: 'تاریخ با نام ماه', example: '۱۵ مرداد ۱۴۰۳' }
+    ];
+
+    // ===== NEW / MODERN DATA =====
+    const newData = [
+      { code: '[$-fa-IR,1]0', category: 'کد جدید', cat: 'new', use: 'روش استاندارد Microsoft 365', example: '۱۲۳۴۵' },
+      { code: '[$-fa-IR,1]General', category: 'کد جدید', cat: 'new', use: 'نمایش خودکار با کد مدرن', example: '۱۲۳۴۵' },
+      { code: '[$-fa-IR,1]#,##0.00', category: 'کد جدید', cat: 'new', use: 'جداکننده + دو رقم اعشار', example: '۱,۲۳۴.۵۶' },
+      { code: '[$-fa-IR,1]#,##0 "تومان"', category: 'کد جدید', cat: 'new', use: 'تومان با کد مدرن', example: '۱,۲۳۴,۵۶۷ تومان' },
+      { code: '[$-fa-IR,1]0.00%', category: 'کد جدید', cat: 'new', use: 'درصد مدرن', example: '۹۸.۵۰٪' },
+      { code: '[$-3020429]General', category: 'کد جدید', cat: 'new', use: 'کد پرکاربرد فارسی', example: '۱۲۳۴۵' },
+      { code: '[$-fa-IR,16]yyyy/mm/dd', category: 'تاریخ جدید', cat: 'date', use: 'تاریخ شمسی با کد مدرن', example: '۱۴۰۳/۰۵/۱۵' },
+      { code: '[$-fa-IR,16]d mmmm yyyy', category: 'تاریخ جدید', cat: 'date', use: 'تاریخ شمسی با نام ماه', example: '۱۵ مرداد ۱۴۰۳' },
+      { code: '[$-fa-IR,1]#,##0;[Red]-#,##0', category: 'پیشرفته', cat: 'advanced', use: 'عدد منفی قرمز رنگ', example: '۱,۲۳۴ / -۱,۲۳۴' },
+      { code: '[$-fa-IR,1]#,##0.00;[Red](#,##0.00);"-"', category: 'پیشرفته', cat: 'advanced', use: 'حسابداری (منفی در پرانتز)', example: '۱,۲۳۴.۵۰ / (۱,۲۳۴.۵۰)' },
+      { code: '[$-fa-IR,1]0.0,,"M"', category: 'پیشرفته', cat: 'advanced', use: 'نمایش میلیون (خلاصه)', example: '۱.۵M' },
+      { code: '[$-fa-IR,1]0.0,"K"', category: 'پیشرفته', cat: 'advanced', use: 'نمایش هزار (خلاصه)', example: '۱.۲K' },
+      { code: '0000000000', category: 'پیشرفته', cat: 'advanced', use: 'کد ملی / شماره ۱۰ رقمی', example: '۰۰۱۲۳۴۵۶۷۸' },
+      { code: '0##########', category: 'پیشرفته', cat: 'advanced', use: 'شماره موبایل با صفر اول', example: '۰۹۱۲۳۴۵۶۷۸۹' }
+    ];
+
+    const toast = document.getElementById('toast');
+
+    function renderCards(containerId, data, filter = 'all') {
+      const el = document.getElementById(containerId);
+      el.innerHTML = '';
+      const filtered = filter === 'all' ? data : data.filter(item => item.category.includes(filter));
+
+      filtered.forEach((item, i) => {
+        const card = document.createElement('div');
+        card.className = `card cat-${item.cat}`;
+        card.innerHTML = `
+          <div class="card-info">
+            <div class="card-top">
+              <span class="category">${item.category}</span>
+              <span class="use">${item.use}</span>
+            </div>
+            <div class="example">${item.example}</div>
+            <div class="code-box">${item.code}</div>
+          </div>
+          <div class="actions">
+            <button class="copy-btn" onclick="copyCode(this, \`${item.code}\`)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              کپی
+            </button>
+          </div>
+        `;
+        el.appendChild(card);
+        setTimeout(() => card.classList.add('visible'), 50 + i * 55);
+      });
+    }
+
+    function copyCode(btn, code) {
+      navigator.clipboard.writeText(code).then(() => {
+        btn.classList.add('copied');
+        btn.innerHTML = `
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          کپی شد
+        `;
+        toast.classList.add('show');
+        setTimeout(() => {
+          toast.classList.remove('show');
+          btn.classList.remove('copied');
+          btn.innerHTML = `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            کپی
+          `;
+        }, 1700);
+      });
+    }
+
+    // Tabs
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const tab = btn.dataset.tab;
+        document.getElementById('tab-main').style.display = tab === 'main' ? 'block' : 'none';
+        document.getElementById('tab-new').style.display = tab === 'new' ? 'block' : 'none';
+        if (tab === 'new') renderCards('cards-new', newData);
+      });
+    });
+
+    // Filters (main)
+    document.querySelectorAll('#filters-main .filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#filters-main .filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderCards('cards-main', mainData, btn.dataset.filter);
+      });
+    });
+
+    // Initial
+    renderCards('cards-main', mainData);
+  </script>
+</body>
+</html>
