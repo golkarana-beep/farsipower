@@ -41,7 +41,6 @@
     100% { background-position: 0% 50%; }
   }
 
-  /* Moving soft blobs */
   .blobs {
     position: fixed;
     inset: 0;
@@ -70,7 +69,6 @@
     66% { transform: translate(-30px, 30px) scale(0.94); }
   }
 
-  /* Floating particles */
   .particle {
     position: absolute;
     width: 6px; height: 6px;
@@ -95,7 +93,6 @@
     padding: 40px 18px 90px;
   }
 
-  /* Header */
   header {
     text-align: center;
     margin-bottom: 36px;
@@ -152,7 +149,6 @@
     margin: 0 auto;
   }
 
-  /* Tabs */
   .tabs {
     display: flex;
     justify-content: center;
@@ -193,7 +189,6 @@
     box-shadow: 0 8px 25px rgba(124, 58, 237, 0.3);
   }
 
-  /* Filters */
   .filters {
     display: flex;
     flex-wrap: wrap;
@@ -222,7 +217,6 @@
     font-weight: 500;
   }
 
-  /* Cards */
   .cards {
     display: grid;
     gap: 14px;
@@ -366,7 +360,6 @@
 
   .copy-btn svg { width: 15px; height: 15px; }
 
-  /* Toast */
   .toast {
     position: fixed;
     bottom: 28px;
@@ -451,13 +444,11 @@
       <p class="subtitle">کدهای سفارشی برای نمایش اعداد فارسی — با یک کلیک کپی کنید</p>
     </header>
 
-    <!-- Tabs -->
     <div class="tabs">
       <button class="tab-btn active" data-tab="main">کدهای اصلی</button>
       <button class="tab-btn" data-tab="new">تازه‌ها <span class="new-badge">جدید</span></button>
     </div>
 
-    <!-- MAIN TAB -->
     <div id="tab-main">
       <div class="filters" id="filters-main">
         <button class="filter-btn active" data-filter="all">همه</button>
@@ -470,21 +461,19 @@
       <div class="cards" id="cards-main"></div>
     </div>
 
-    <!-- NEW TAB -->
     <div id="tab-new" style="display:none;">
-      <p class="section-title">کدهای جدیدتر و کاربردی‌تر (مناسب Microsoft 365 و نسخه‌های جدید)</p>
+      <p class="section-title">کدهای پیشرفته و کاربردی‌تر (منفی، حسابداری، خلاصه‌سازی، شماره‌ها و...)</p>
       <div class="cards" id="cards-new"></div>
     </div>
 
     <div class="tip">
-      <strong>نکته:</strong> این کدها را در بخش Format Cells → Custom (اکسل) یا Format → Number → Custom (پاورپوینت) وارد کنید.
+      <strong>نکته:</strong> این کدها را در بخش Format Cells → Custom (اکسل) یا Format → Number → Custom (پاورپوینت) وارد کنید. بخش <code style="direction:ltr;display:inline-block">[$-3010000]</code> وظیفه فارسی‌سازی ارقام را دارد و بقیه کد، شکل نمایش را تعیین می‌کند.
     </div>
   </div>
 
   <div class="toast" id="toast">کپی شد ✓</div>
 
   <script>
-    // Particles
     const particlesEl = document.getElementById('particles');
     for (let i = 0; i < 18; i++) {
       const p = document.createElement('div');
@@ -496,40 +485,41 @@
       particlesEl.appendChild(p);
     }
 
-    // ===== MAIN DATA (original) =====
     const mainData = [
-      { code: '[$ـ3010000]General', category: 'اعداد عمومی', cat: 'general', use: 'نمایش خودکار اعداد', example: '۱۲۳۴۵ یا 12345' },
-      { code: '[$ـ3010000]#,##0', category: 'اعداد عمومی', cat: 'general', use: 'اعداد با جداکننده هزارگان', example: '۱,۲۳۴,۵۶۷' },
-      { code: '[$ـ3010000]#,##0.00', category: 'اعداد عمومی', cat: 'general', use: 'اعداد اعشاری با جداکننده', example: '۱,۲۳۴.۵۶' },
-      { code: '[$ـ3010000]0.00', category: 'اعداد اعشاری', cat: 'decimal', use: 'اعداد اعشاری ساده', example: '۱۲۳۴.۵۶' },
-      { code: '[$ـ3010000]0.000', category: 'اعداد اعشاری', cat: 'decimal', use: 'اعداد با سه رقم اعشار', example: '۱۲۳۴.۵۶۷' },
-      { code: '[$ـ3010000]0.0000', category: 'اعداد اعشاری', cat: 'decimal', use: 'اعداد با چهار رقم اعشار', example: '۱۲۳۴.۵۶۷۸' },
-      { code: '[$ـ3010000]0%', category: 'درصد', cat: 'percent', use: 'درصد بدون اعشار', example: '۹۸٪' },
-      { code: '[$ـ3010000]0.00%', category: 'درصد', cat: 'percent', use: 'درصد با دو رقم اعشار', example: '۹۸.۵۰٪' },
-      { code: '[$ـ3010000]0.000%', category: 'درصد', cat: 'percent', use: 'درصد با سه رقم اعشار', example: '۹۸.۵۰۰٪' },
-      { code: '[$ـ3010000]#,##0 "ریال"', category: 'پول و ارز', cat: 'currency', use: 'اعداد با واحد ریال', example: '۱,۲۳۴,۵۶۷ ریال' },
-      { code: '[$ـ3010000]"ریال" #,##0', category: 'پول و ارز', cat: 'currency', use: 'اعداد با علامت ریال', example: 'ریال ۱,۲۳۴,۵۶۷' },
-      { code: '[$ـ3010000]#,##0 "تومان"', category: 'پول و ارز', cat: 'currency', use: 'اعداد با واحد تومان', example: '۱,۲۳۴,۵۶۷ تومان' },
-      { code: '[$ـ3010000]yyyy/mm/dd', category: 'تاریخ', cat: 'date', use: 'تاریخ عددی', example: '۱۴۰۳/۰۵/۱۵' },
-      { code: '[$ـ3010000]d mmmm yyyy', category: 'تاریخ', cat: 'date', use: 'تاریخ با نام ماه', example: '۱۵ مرداد ۱۴۰۳' }
+      { code: '0[$-3010000]', category: 'اعداد عمومی', cat: 'general', use: 'عدد صحیح ساده', example: '۱۲۳۵' },
+      { code: '#,##0[$-3010000]', category: 'اعداد عمومی', cat: 'general', use: 'عدد صحیح با جداکننده هزارگان', example: '۱,۲۳۵' },
+      { code: '#,##0.00[$-3010000]', category: 'اعداد عمومی', cat: 'general', use: 'اعشار ۲ رقمی با جداکننده هزارگان', example: '۱,۲۳۴.۵۷' },
+      { code: '0.0[$-3010000]', category: 'اعداد اعشاری', cat: 'decimal', use: 'اعشار ۱ رقمی', example: '۱۲۳۴.۶' },
+      { code: '0.00[$-3010000]', category: 'اعداد اعشاری', cat: 'decimal', use: 'اعشار ۲ رقمی', example: '۱۲۳۴.۵۷' },
+      { code: '0.000[$-3010000]', category: 'اعداد اعشاری', cat: 'decimal', use: 'اعشار ۳ رقمی', example: '۱۲۳۴.۵۶۷' },
+      { code: '0.0000[$-3010000]', category: 'اعداد اعشاری', cat: 'decimal', use: 'اعشار ۴ رقمی', example: '۱۲۳۴.۵۶۷۸' },
+      { code: '0%[$-3010000]', category: 'درصد', cat: 'percent', use: 'درصد بدون اعشار', example: '۱۲۳٪' },
+      { code: '0.0%[$-3010000]', category: 'درصد', cat: 'percent', use: 'درصد با ۱ رقم اعشار', example: '۱۲۳.۵٪' },
+      { code: '0.00%[$-3010000]', category: 'درصد', cat: 'percent', use: 'درصد با ۲ رقم اعشار', example: '۱۲۳.۴۶٪' },
+      { code: '#,##0%[$-3010000]', category: 'درصد', cat: 'percent', use: 'درصد با جداکننده هزارگان', example: '۱۲۳,۴۵۷٪' },
+      { code: '#,##0" ریال"[$-3010000]', category: 'پول و ارز', cat: 'currency', use: 'عدد با واحد ریال', example: '۱,۲۳۵ ریال' },
+      { code: '#,##0" تومان"[$-3010000]', category: 'پول و ارز', cat: 'currency', use: 'عدد با واحد تومان', example: '۱,۲۳۵ تومان' },
+      { code: '#,##0.00" دلار"[$-3010000]', category: 'پول و ارز', cat: 'currency', use: 'عدد اعشاری با واحد دلار', example: '۱,۲۳۴.۵۷ دلار' },
+      { code: '[$-fa-ir,16]yyyy/mm/dd', category: 'تاریخ', cat: 'date', use: 'تاریخ شمسی عددی', example: '۱۴۰۳/۰۸/۱۵' },
+      { code: '[$-fa-ir,16]d mmmm yyyy', category: 'تاریخ', cat: 'date', use: 'تاریخ شمسی با نام ماه', example: '۱۵ آبان ۱۴۰۳' },
+      { code: '[$-fa-ir,16]dddd d mmmm yyyy', category: 'تاریخ', cat: 'date', use: 'تاریخ شمسی با نام روز', example: 'سه‌شنبه ۱۵ آبان ۱۴۰۳' }
     ];
 
-    // ===== NEW / MODERN DATA =====
     const newData = [
-      { code: '[$-fa-IR,1]0', category: 'کد جدید', cat: 'new', use: 'روش استاندارد Microsoft 365', example: '۱۲۳۴۵' },
-      { code: '[$-fa-IR,1]General', category: 'کد جدید', cat: 'new', use: 'نمایش خودکار با کد مدرن', example: '۱۲۳۴۵' },
-      { code: '[$-fa-IR,1]#,##0.00', category: 'کد جدید', cat: 'new', use: 'جداکننده + دو رقم اعشار', example: '۱,۲۳۴.۵۶' },
-      { code: '[$-fa-IR,1]#,##0 "تومان"', category: 'کد جدید', cat: 'new', use: 'تومان با کد مدرن', example: '۱,۲۳۴,۵۶۷ تومان' },
-      { code: '[$-fa-IR,1]0.00%', category: 'کد جدید', cat: 'new', use: 'درصد مدرن', example: '۹۸.۵۰٪' },
-      { code: '[$-3020429]General', category: 'کد جدید', cat: 'new', use: 'کد پرکاربرد فارسی', example: '۱۲۳۴۵' },
-      { code: '[$-fa-IR,16]yyyy/mm/dd', category: 'تاریخ جدید', cat: 'date', use: 'تاریخ شمسی با کد مدرن', example: '۱۴۰۳/۰۵/۱۵' },
-      { code: '[$-fa-IR,16]d mmmm yyyy', category: 'تاریخ جدید', cat: 'date', use: 'تاریخ شمسی با نام ماه', example: '۱۵ مرداد ۱۴۰۳' },
-      { code: '[$-fa-IR,1]#,##0;[Red]-#,##0', category: 'پیشرفته', cat: 'advanced', use: 'عدد منفی قرمز رنگ', example: '۱,۲۳۴ / -۱,۲۳۴' },
-      { code: '[$-fa-IR,1]#,##0.00;[Red](#,##0.00);"-"', category: 'پیشرفته', cat: 'advanced', use: 'حسابداری (منفی در پرانتز)', example: '۱,۲۳۴.۵۰ / (۱,۲۳۴.۵۰)' },
-      { code: '[$-fa-IR,1]0.0,,"M"', category: 'پیشرفته', cat: 'advanced', use: 'نمایش میلیون (خلاصه)', example: '۱.۵M' },
-      { code: '[$-fa-IR,1]0.0,"K"', category: 'پیشرفته', cat: 'advanced', use: 'نمایش هزار (خلاصه)', example: '۱.۲K' },
-      { code: '0000000000', category: 'پیشرفته', cat: 'advanced', use: 'کد ملی / شماره ۱۰ رقمی', example: '۰۰۱۲۳۴۵۶۷۸' },
-      { code: '0##########', category: 'پیشرفته', cat: 'advanced', use: 'شماره موبایل با صفر اول', example: '۰۹۱۲۳۴۵۶۷۸۹' }
+      { code: '[Red]-0[$-3010000]', category: 'پیشرفته', cat: 'advanced', use: 'عدد منفی به رنگ قرمز', example: '-۱۲۳۵ (قرمز)' },
+      { code: '[Red]-#,##0[$-3010000]', category: 'پیشرفته', cat: 'advanced', use: 'منفی قرمز با جداکننده هزارگان', example: '-۱,۲۳۵ (قرمز)' },
+      { code: '[Red]-0.00%[$-3010000]', category: 'پیشرفته', cat: 'advanced', use: 'درصد منفی به رنگ قرمز', example: '-۱۲.۳۴٪ (قرمز)' },
+      { code: '#,##0.00;[Red](#,##0.00)[$-3010000];"-"', category: 'پیشرفته', cat: 'advanced', use: 'قالب حسابداری (منفی در پرانتز، صفر به صورت خط تیره)', example: '(۱,۲۳۴.۵۰)' },
+      { code: '0.00E+00[$-3010000]', category: 'پیشرفته', cat: 'advanced', use: 'نماد علمی (Scientific)', example: '۱.۲۳E+۰۳' },
+      { code: '# ?/?[$-3010000]', category: 'پیشرفته', cat: 'advanced', use: 'نمایش کسری', example: '۱ ۱/۲' },
+      { code: '#,##0,," میلیون"[$-3010000]', category: 'پیشرفته', cat: 'advanced', use: 'خلاصه‌سازی به میلیون', example: '۱.۵ میلیون' },
+      { code: '#,##0," هزار"[$-3010000]', category: 'پیشرفته', cat: 'advanced', use: 'خلاصه‌سازی به هزار', example: '۱.۲ هزار' },
+      { code: '0000000000[$-3010000]', category: 'کد جدید', cat: 'new', use: 'کد ملی ۱۰ رقمی (با صفرهای ابتدایی)', example: '۰۰۱۲۳۴۵۶۷۸' },
+      { code: '0##########[$-3010000]', category: 'کد جدید', cat: 'new', use: 'شماره موبایل با صفر اول', example: '۰۹۱۲۳۴۵۶۷۸۹' },
+      { code: '0000[$-3010000]', category: 'کد جدید', cat: 'new', use: 'کد ۴ رقمی (مثل کد پستی کوتاه)', example: '۰۰۴۲' },
+      { code: '[$-fa-ir,16]yyyy/mm/dd hh:mm', category: 'تاریخ جدید', cat: 'date', use: 'تاریخ و ساعت شمسی', example: '۱۴۰۳/۰۸/۱۵ ۱۴:۳۰' },
+      { code: '[$-fa-ir,16]mmmm', category: 'تاریخ جدید', cat: 'date', use: 'نام ماه شمسی', example: 'آبان' },
+      { code: '[$-fa-ir,16]dddd', category: 'تاریخ جدید', cat: 'date', use: 'نام روز هفته', example: 'سه‌شنبه' }
     ];
 
     const toast = document.getElementById('toast');
@@ -590,7 +580,6 @@
       });
     }
 
-    // Tabs
     document.querySelectorAll('.tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -602,7 +591,6 @@
       });
     });
 
-    // Filters (main)
     document.querySelectorAll('#filters-main .filter-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('#filters-main .filter-btn').forEach(b => b.classList.remove('active'));
@@ -611,7 +599,6 @@
       });
     });
 
-    // Initial
     renderCards('cards-main', mainData);
   </script>
 </body>
