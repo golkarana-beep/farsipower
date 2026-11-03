@@ -1,605 +1,439 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>کدهای فرمت عددی فارسی</title>
-<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Chatgol Ai</title>
+<script>try{var t=localStorage.getItem('cg_theme');document.documentElement.dataset.theme=t||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark')}catch(e){document.documentElement.dataset.theme='dark'}</script>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌸</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;800&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg1: #f0f7ff;
-    --bg2: #fdf2f8;
-    --bg3: #f0fdf4;
-    --card: rgba(255, 255, 255, 0.72);
-    --text: #1e293b;
-    --muted: #64748b;
-    --purple: #8b5cf6;
-    --blue: #3b82f6;
-    --cyan: #06b6d4;
-    --green: #10b981;
-    --pink: #ec4899;
-    --orange: #f97316;
-    --yellow: #eab308;
-  }
+/* --- تم تاریک خاکستری --- */
+:root{
+  --bg:#1a1a1a; --surface:#262626; --raised:#333333; --line:#444444; 
+  --text:#eeeeee; --mute:#999999; --petal:#ff6b9d; --saffron:#ffc857; 
+  --leaf:#7ae0b0; --r:16px;
+}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{font-family:Vazirmatn,system-ui,sans-serif;background:var(--bg);color:var(--text);display:flex;overflow:hidden;padding-top:env(safe-area-inset-top,0)}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+button:focus-visible,textarea:focus-visible,input:focus-visible{outline:2px solid var(--saffron);outline-offset:2px}
+aside{width:290px;background:var(--surface);border-left:1px solid var(--line);display:flex;flex-direction:column;padding:14px;gap:10px;transition:transform .25s;z-index:20}
+.newchat{background:linear-gradient(135deg,var(--petal),#c44cff);color:#fff;font-weight:600;padding:12px;border-radius:12px}
+.list{flex:1;overflow:auto;display:flex;flex-direction:column;gap:4px}
+.item{display:flex;align-items:center;gap:6px;padding:10px 12px;border-radius:10px;color:var(--mute);font-size:14px}
+.item span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer}
+.item:hover{background:var(--raised)}
+.item.on{background:var(--raised);color:var(--text);box-shadow:inset -3px 0 var(--petal)}
+.item .del{opacity:0;color:var(--petal)}
+.item:hover .del,.item.on .del{opacity:1}
+.setbtn{padding:11px;border-radius:12px;border:1px solid var(--line);color:var(--mute)}
+.setbtn:hover{color:var(--text);border-color:var(--mute)}
+main{flex:1;display:flex;flex-direction:column;min-width:0;height:100%;position:relative}
+header{display:flex;align-items:center;justify-content:center;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.1);background:rgba(26,26,26,.85);backdrop-filter:blur(10px);position:relative;z-index:10}
+.menu{position:absolute;right:14px;display:none;font-size:22px;padding:6px 10px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:26px;letter-spacing:.5px;direction:ltr}
+.logo svg{width:38px;height:38px;animation:bloom 1.2s cubic-bezier(.2,.9,.3,1.2) both}
+.logo b{background:linear-gradient(90deg,var(--petal),var(--saffron));-webkit-background-clip:text;background-clip:text;color:transparent}
+.logo i{font-style:normal;font-weight:300;color:var(--leaf)}
+@keyframes bloom{from{transform:scale(.2) rotate(-90deg);opacity:0}to{transform:none;opacity:1}}
+#msgs{flex:1;overflow:auto;padding:24px 16px;display:flex;flex-direction:column;gap:16px;scroll-behavior:smooth;width:100%}
+.wrap{width:100%;max-width:780px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+.m{max-width:85%;padding:12px 16px;border-radius:var(--r);line-height:1.9;font-size:15px;word-wrap:break-word}
+.m.user{align-self:flex-start;background:linear-gradient(135deg,#7b3fd1,#c44cff);border-bottom-right-radius:4px;color:#fff}
+.m.ai{align-self:flex-end;background:rgba(38,38,38,.62);border:1px solid rgba(255,255,255,0.1);border-bottom-left-radius:4px;backdrop-filter:blur(12px)}
+.m img{max-width:260px;max-height:260px;border-radius:10px;display:block;margin-bottom:8px}
+.m pre{direction:ltr;text-align:left;background:#0d0d0d;padding:12px;border-radius:10px;overflow:auto;margin:8px 0;font-size:13px}
+.m code{direction:ltr;background:#0d0d0d;padding:1px 6px;border-radius:6px;font-size:13px}
+.m pre code{padding:0;background:none}
+.tag{display:block;margin-top:6px;font-size:11px;color:var(--leaf)}
+.err{color:var(--saffron)}
+.empty{margin:auto;text-align:center;color:var(--mute);max-width:420px;line-height:2}
+.empty h2{color:var(--text);font-size:22px;margin-bottom:6px;background:linear-gradient(90deg,var(--petal),var(--saffron));-webkit-background-clip:text;background-clip:text;color:transparent}
+.dots span{display:inline-block;width:7px;height:7px;margin:0 2px;border-radius:50%;background:var(--petal);animation:b 1s infinite}
+.dots span:nth-child(2){animation-delay:.15s}.dots span:nth-child(3){animation-delay:.3s}
+@keyframes b{50%{transform:translateY(-5px);opacity:.4}}
+footer{padding:12px 16px calc(14px + env(safe-area-inset-bottom,0));width:100%;transition:all 0.3s ease}
+.routerbar{max-width:780px;margin:0 auto 8px;display:flex;align-items:center;gap:8px;color:var(--mute);font-size:12px;width:100%}
+.routerbar select,.prov select{background:var(--surface);border:1px solid var(--line);color:var(--text);border-radius:10px;padding:7px 10px;font:inherit}
+#routeStatus{margin-right:auto;color:var(--leaf)}
+#stop{border:1px solid var(--line);color:var(--saffron)}
+.box{max-width:780px;margin:0 auto;background:rgba(38,38,38,.6);backdrop-filter:blur(16px);border:1px solid var(--line);border-radius:20px;padding:8px 10px;display:flex;align-items:flex-end;gap:6px;box-shadow:0 10px 40px rgba(0,0,0,.35)}
+.box:focus-within{border-color:var(--petal);box-shadow:0 0 0 1px var(--petal),0 0 32px rgba(255,107,157,.28)}
+textarea{flex:1;background:none;border:0;color:var(--text);font:inherit;resize:none;max-height:160px;padding:8px;outline:none}
+.ic{width:40px;height:40px;border-radius:12px;font-size:19px;color:var(--mute)}
+.ic:hover{background:var(--raised);color:var(--text)}
+.send{background:linear-gradient(135deg,var(--petal),#c44cff);color:#fff;box-shadow:0 6px 18px rgba(196,76,255,.45)}
+.prev{max-width:780px;margin:0 auto 8px;display:none}
+.prev img{height:64px;border-radius:10px;border:1px solid var(--line)}
+.prev button{color:var(--petal);margin-right:6px}
+dialog{background:var(--surface);color:var(--text);border:1px solid var(--line);border-radius:20px;padding:22px;width:min(560px,92vw);max-height:88vh;overflow:auto;margin:auto}
+dialog::backdrop{background:rgba(5,3,10,.7)}
+dialog h3{margin-bottom:6px}
+dialog p.n{color:var(--mute);font-size:13px;line-height:1.9;margin-bottom:14px}
+.prov{border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.prov label{display:flex;justify-content:space-between;font-weight:600;margin-bottom:8px;align-items:center}
+.prov label small{color:var(--leaf);font-weight:300}
+.prov input[type=password],.prov input[type=text]{width:100%;margin-top:6px;background:var(--bg);border:1px solid var(--line);color:var(--text);padding:9px 11px;border-radius:10px;font:inherit;font-size:13px;direction:ltr}
+.row{display:flex;gap:8px;justify-content:flex-end;margin-top:14px}
+.row button{padding:10px 18px;border-radius:12px;border:1px solid var(--line)}
+.row .ok{background:var(--petal);border-color:var(--petal);color:#1a0b14;font-weight:600}
+.modes{max-width:780px;margin:0 auto 8px;display:flex;gap:6px;flex-wrap:wrap}
+.modes button{padding:7px 14px;border-radius:999px;border:1px solid var(--line);color:var(--mute);font-size:13px}
+.modes button.on{background:var(--raised);color:var(--text);border-color:var(--petal)}
+.cb{margin:10px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;direction:ltr}
+.ch{display:flex;gap:6px;align-items:center;background:var(--raised);padding:6px 10px;font-size:12px;color:var(--mute)}
+.ch .sp{flex:1}.ch button{padding:3px 9px;border-radius:8px;border:1px solid var(--line);font-size:12px}.ch button:hover{color:var(--text);border-color:var(--petal)}
+.m .cb pre{margin:0;border-radius:0}
+.gen{width:100%;max-width:420px;max-height:none!important;background:var(--raised);min-height:120px}
+.dl{font-size:12px;color:var(--leaf)}
+details{font-size:12px;color:var(--mute);margin-top:6px;direction:ltr;text-align:left}
+dialog.big{width:min(1000px,96vw);height:86vh;padding:12px}
+dialog.big iframe{width:100%;height:calc(100% - 52px);border:0;background:#fff;border-radius:10px}
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+/* --- استایل وسط چین شدن باکس تایپ --- */
+main.chat-empty { justify-content: center; align-items: center; }
+main.chat-empty header { position: absolute; top: 0; left: 0; width: 100%; }
+main.chat-empty #msgs { flex: 0 0 auto; width: 100%; max-width: 780px; padding: 0 16px; margin-bottom: 20px; overflow: visible; }
+main.chat-empty footer { flex: 0 0 auto; width: 100%; max-width: 780px; padding: 0 16px; }
+main.chat-empty .routerbar, main.chat-empty .modes { justify-content: center; }
 
-  body {
-    font-family: 'Vazirmatn', system-ui, sans-serif;
-    background: linear-gradient(135deg, var(--bg1), var(--bg2), var(--bg3));
-    background-size: 300% 300%;
-    animation: bgShift 18s ease infinite;
-    color: var(--text);
-    min-height: 100vh;
-    overflow-x: hidden;
-    line-height: 1.65;
-  }
+body{background:radial-gradient(1100px 650px at 85% -10%,#333333 0,transparent 60%),radial-gradient(900px 600px at 0% 110%,#222222 0,transparent 55%),#111111}
+#bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+aside,main{position:relative;z-index:1}
+aside{background:rgba(30,30,30,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.theme{position:absolute;left:14px;top:12px;font-size:19px;padding:6px 10px;border-radius:12px;border:1px solid var(--line);background:var(--surface)}
+.theme:hover{background:var(--raised)}
+.by{font-size:12px;color:var(--mute);letter-spacing:.2px}.by b{color:var(--saffron);font-weight:600}
+.logo svg{animation:bloom 1.2s cubic-bezier(.2,.9,.3,1.2) both,spin 40s linear 1.2s infinite;filter:drop-shadow(0 0 12px rgba(255,107,157,.55))}
+@keyframes spin{to{transform:rotate(360deg)}}
+.logo b{background-size:200% 100%;animation:shine 6s linear infinite}
+@keyframes shine{to{background-position:200% 0}}
 
-  @keyframes bgShift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
+/* --- تم روشن (خاکستری تیره‌تر) --- */
+html[data-theme=light]{color-scheme:light}
+[data-theme=light]{
+  --bg:#c9c9c9; --surface:#d9d9d9; --raised:#e5e5e5; --line:#b0b0b0; 
+  --text:#1a1a1a; --mute:#555555; --petal:#d81b60; --saffron:#8c5a00; --leaf:#0a6b46;
+}
+[data-theme=light] body{background:radial-gradient(1100px 650px at 85% -10%,#e0e0e0 0,transparent 60%),radial-gradient(900px 600px at 0% 110%,#d0d0d0 0,transparent 55%),#c0c0c0}
+[data-theme=light] aside{background:rgba(200,200,200,.6)}
+[data-theme=light] header{background:rgba(201,201,201,.55);border-bottom-color:rgba(0,0,0,.1)}
+[data-theme=light] .m.ai,[data-theme=light] .box{background:rgba(217,217,217,.78);border-color:rgba(0,0,0,.1)}
+[data-theme=light] .box{box-shadow:0 10px 36px rgba(0,0,0,.15)}
+[data-theme=light] .m pre,[data-theme=light] .m code{background:#e0e0e0;color:#1a1a1a}
+[data-theme=light] .row .ok{color:#fff}
+[data-theme=light] dialog::backdrop{background:rgba(60,60,60,.35)}
+[data-theme=light] .logo svg{filter:drop-shadow(0 0 8px rgba(216,27,96,.4))}
 
-  .blobs {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    overflow: hidden;
-    pointer-events: none;
-  }
-
-  .blob {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(70px);
-    opacity: 0.45;
-    animation: float 22s ease-in-out infinite;
-  }
-
-  .b1 { width: 480px; height: 480px; background: #c4b5fd; top: -120px; right: -80px; }
-  .b2 { width: 420px; height: 420px; background: #93c5fd; bottom: -100px; left: -100px; animation-delay: -6s; }
-  .b3 { width: 320px; height: 320px; background: #f9a8d4; top: 35%; left: 25%; animation-delay: -12s; opacity: 0.35; }
-  .b4 { width: 280px; height: 280px; background: #6ee7b7; top: 15%; right: 20%; animation-delay: -4s; opacity: 0.3; }
-  .b5 { width: 200px; height: 200px; background: #fcd34d; bottom: 20%; right: 30%; animation-delay: -9s; opacity: 0.25; }
-
-  @keyframes float {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    33% { transform: translate(40px, -50px) scale(1.08); }
-    66% { transform: translate(-30px, 30px) scale(0.94); }
-  }
-
-  .particle {
-    position: absolute;
-    width: 6px; height: 6px;
-    background: white;
-    border-radius: 50%;
-    opacity: 0.5;
-    animation: rise 12s linear infinite;
-  }
-
-  @keyframes rise {
-    0% { transform: translateY(100vh) scale(0); opacity: 0; }
-    10% { opacity: 0.5; }
-    90% { opacity: 0.4; }
-    100% { transform: translateY(-10vh) scale(1); opacity: 0; }
-  }
-
-  .container {
-    position: relative;
-    z-index: 1;
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 40px 18px 90px;
-  }
-
-  header {
-    text-align: center;
-    margin-bottom: 36px;
-    animation: fadeDown 0.8s ease both;
-  }
-
-  @keyframes fadeDown {
-    from { opacity: 0; transform: translateY(-25px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: white;
-    border: 1px solid #e2e8f0;
-    color: var(--purple);
-    padding: 7px 18px;
-    border-radius: 50px;
-    font-size: 0.85rem;
-    font-weight: 500;
-    margin-bottom: 16px;
-    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.1);
-  }
-
-  .badge-dot {
-    width: 8px; height: 8px;
-    background: var(--green);
-    border-radius: 50%;
-    box-shadow: 0 0 8px var(--green);
-    animation: pulse 2s ease infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.35); opacity: 0.6; }
-  }
-
-  h1 {
-    font-size: clamp(1.9rem, 5vw, 2.7rem);
-    font-weight: 700;
-    background: linear-gradient(90deg, #7c3aed, #2563eb, #db2777);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 10px;
-  }
-
-  .subtitle {
-    color: var(--muted);
-    font-size: 1.05rem;
-    max-width: 480px;
-    margin: 0 auto;
-  }
-
-  .tabs {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 28px;
-    animation: fadeUp 0.7s ease 0.15s both;
-  }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(18px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .tab-btn {
-    background: white;
-    border: 1px solid #e2e8f0;
-    color: var(--muted);
-    padding: 11px 28px;
-    border-radius: 50px;
-    font-family: inherit;
-    font-size: 0.95rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 2px 10px rgba(0,0,0,0.04);
-  }
-
-  .tab-btn:hover {
-    border-color: #c4b5fd;
-    color: var(--purple);
-    transform: translateY(-2px);
-  }
-
-  .tab-btn.active {
-    background: linear-gradient(135deg, #7c3aed, #6366f1);
-    border-color: transparent;
-    color: white;
-    box-shadow: 0 8px 25px rgba(124, 58, 237, 0.3);
-  }
-
-  .filters {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    justify-content: center;
-    margin-bottom: 28px;
-  }
-
-  .filter-btn {
-    background: white;
-    border: 1px solid #e2e8f0;
-    color: var(--muted);
-    padding: 7px 16px;
-    border-radius: 50px;
-    font-family: inherit;
-    font-size: 0.85rem;
-    cursor: pointer;
-    transition: all 0.25s ease;
-  }
-
-  .filter-btn:hover { border-color: #a5b4fc; color: var(--blue); }
-  .filter-btn.active {
-    background: #eef2ff;
-    border-color: #a5b4fc;
-    color: #4f46e5;
-    font-weight: 500;
-  }
-
-  .cards {
-    display: grid;
-    gap: 14px;
-  }
-
-  .card {
-    background: var(--card);
-    backdrop-filter: blur(16px);
-    border: 1px solid rgba(255,255,255,0.7);
-    border-radius: 18px;
-    padding: 20px 22px;
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 16px;
-    align-items: center;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.05);
-    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-    opacity: 0;
-    transform: translateY(24px);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .card.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  .card::before {
-    content: '';
-    position: absolute;
-    top: 0; right: 0;
-    width: 5px; height: 100%;
-    border-radius: 0 18px 18px 0;
-  }
-
-  .card.cat-general::before { background: linear-gradient(180deg, #a78bfa, #8b5cf6); }
-  .card.cat-decimal::before { background: linear-gradient(180deg, #22d3ee, #06b6d4); }
-  .card.cat-percent::before { background: linear-gradient(180deg, #f472b6, #ec4899); }
-  .card.cat-currency::before { background: linear-gradient(180deg, #fbbf24, #f59e0b); }
-  .card.cat-date::before { background: linear-gradient(180deg, #34d399, #10b981); }
-  .card.cat-new::before { background: linear-gradient(180deg, #60a5fa, #3b82f6); }
-  .card.cat-advanced::before { background: linear-gradient(180deg, #fb923c, #f97316); }
-
-  .card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 18px 40px rgba(0,0,0,0.09);
-    border-color: rgba(139, 92, 246, 0.25);
-  }
-
-  .card-info { display: flex; flex-direction: column; gap: 9px; }
-
-  .card-top {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 9px;
-  }
-
-  .category {
-    display: inline-block;
-    padding: 4px 12px;
-    border-radius: 50px;
-    font-size: 0.76rem;
-    font-weight: 500;
-  }
-
-  .cat-general .category { background: #f3e8ff; color: #7c3aed; }
-  .cat-decimal .category { background: #cffafe; color: #0891b2; }
-  .cat-percent .category { background: #fce7f3; color: #db2777; }
-  .cat-currency .category { background: #fef3c7; color: #d97706; }
-  .cat-date .category { background: #d1fae5; color: #059669; }
-  .cat-new .category { background: #dbeafe; color: #2563eb; }
-  .cat-advanced .category { background: #ffedd5; color: #ea580c; }
-
-  .use {
-    font-size: 0.93rem;
-    font-weight: 500;
-    color: #475569;
-  }
-
-  .example {
-    font-size: 1.15rem;
-    font-weight: 600;
-    direction: ltr;
-    text-align: right;
-  }
-
-  .cat-general .example { color: #7c3aed; }
-  .cat-decimal .example { color: #0891b2; }
-  .cat-percent .example { color: #db2777; }
-  .cat-currency .example { color: #d97706; }
-  .cat-date .example { color: #059669; }
-  .cat-new .example { color: #2563eb; }
-  .cat-advanced .example { color: #ea580c; }
-
-  .code-box {
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 10px;
-    padding: 10px 14px;
-    font-family: 'Courier New', Consolas, monospace;
-    font-size: 0.85rem;
-    color: #334155;
-    direction: ltr;
-    text-align: left;
-    overflow-x: auto;
-    white-space: nowrap;
-  }
-
-  .actions { display: flex; flex-direction: column; align-items: flex-end; }
-
-  .copy-btn {
-    background: linear-gradient(135deg, #7c3aed, #6366f1);
-    color: white;
-    border: none;
-    padding: 11px 20px;
-    border-radius: 12px;
-    font-family: inherit;
-    font-size: 0.88rem;
-    font-weight: 500;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 14px rgba(124, 58, 237, 0.25);
-    min-width: 100px;
-    justify-content: center;
-  }
-
-  .copy-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 8px 22px rgba(124, 58, 237, 0.35);
-  }
-
-  .copy-btn.copied {
-    background: linear-gradient(135deg, #10b981, #059669);
-    box-shadow: 0 6px 18px rgba(16, 185, 129, 0.3);
-  }
-
-  .copy-btn svg { width: 15px; height: 15px; }
-
-  .toast {
-    position: fixed;
-    bottom: 28px;
-    left: 50%;
-    transform: translateX(-50%) translateY(100px);
-    background: linear-gradient(135deg, #10b981, #059669);
-    color: white;
-    padding: 13px 28px;
-    border-radius: 50px;
-    font-weight: 600;
-    font-size: 0.95rem;
-    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
-    z-index: 100;
-    opacity: 0;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    pointer-events: none;
-  }
-
-  .toast.show {
-    transform: translateX(-50%) translateY(0);
-    opacity: 1;
-  }
-
-  .tip {
-    text-align: center;
-    margin-top: 42px;
-    padding: 18px;
-    background: rgba(255,255,255,0.7);
-    border: 1px solid #e2e8f0;
-    border-radius: 14px;
-    color: var(--muted);
-    font-size: 0.9rem;
-    backdrop-filter: blur(8px);
-  }
-
-  .tip strong { color: var(--purple); }
-
-  .section-title {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 1.05rem;
-    color: var(--muted);
-    font-weight: 500;
-  }
-
-  .new-badge {
-    display: inline-block;
-    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-    color: white;
-    font-size: 0.7rem;
-    padding: 2px 8px;
-    border-radius: 20px;
-    margin-right: 6px;
-    vertical-align: middle;
-  }
-
-  @media (max-width: 700px) {
-    .card { grid-template-columns: 1fr; gap: 12px; }
-    .actions { flex-direction: row; justify-content: space-between; width: 100%; }
-    .code-box { font-size: 0.78rem; }
-  }
+html,body{height:100dvh}
+@media(max-width:760px){
+ aside{position:fixed;top:0;bottom:0;right:0;left:auto;width:84%;max-width:320px;transform:translateX(100%);z-index:30;padding-top:calc(14px + env(safe-area-inset-top,0px));box-shadow:-12px 0 40px rgba(0,0,0,.4)}
+ aside.open{transform:none}
+ html[data-theme] aside{background:var(--surface)}
+ .menu{display:block;top:8px}
+ .theme{top:8px}
+ header{padding:10px 54px}
+ .logo{font-size:21px}.logo svg{width:32px;height:32px}
+ .by{font-size:11px}
+ .m{max-width:94%}
+ #msgs{padding:16px 10px}
+ .item .del{opacity:1}
+ textarea,.prov input{font-size:16px}
+ .modes{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}.modes button{white-space:nowrap}
+ header,.m.ai,.box{backdrop-filter:none;-webkit-backdrop-filter:none}
+ dialog.big{width:100vw;height:100dvh;max-width:100vw;max-height:100dvh;border-radius:0}
+ dialog{max-height:92dvh}
+}
 </style>
 </head>
 <body>
-
-  <div class="blobs">
-    <div class="blob b1"></div>
-    <div class="blob b2"></div>
-    <div class="blob b3"></div>
-    <div class="blob b4"></div>
-    <div class="blob b5"></div>
-  </div>
-  <div id="particles"></div>
-
-  <div class="container">
-    <header>
-      <div class="badge">
-        <span class="badge-dot"></span>
-        PowerPoint & Excel
-      </div>
-      <h1>کدهای فرمت عددی فارسی</h1>
-      <p class="subtitle">کدهای سفارشی برای نمایش اعداد فارسی — با یک کلیک کپی کنید</p>
-    </header>
-
-    <div class="tabs">
-      <button class="tab-btn active" data-tab="main">کدهای اصلی</button>
-      <button class="tab-btn" data-tab="new">تازه‌ها <span class="new-badge">جدید</span></button>
+<canvas id="bg" aria-hidden="true"></canvas>
+<aside id="side">
+  <button class="newchat" id="newBtn">+ گفتگوی جدید</button>
+  <div class="list" id="list"></div>
+  <button class="setbtn" id="setBtn">تنظیمات و کلیدهای API</button>
+</aside>
+<main>
+  <header>
+    <button class="menu" id="menu" aria-label="منو">☰</button>
+    <button class="theme" id="theme" aria-label="تغییر تم تاریک و روشن"></button>
+    <div class="logo" aria-label="Chatgol Ai">
+      <svg viewBox="0 0 100 100" aria-hidden="true">
+        <g transform="translate(50 50)">
+          <ellipse rx="13" ry="28" cy="-24" fill="#ff6b9d"/>
+          <ellipse rx="13" ry="28" cy="-24" fill="#ff8fb8" transform="rotate(72)"/>
+          <ellipse rx="13" ry="28" cy="-24" fill="#ff6b9d" transform="rotate(144)"/>
+          <ellipse rx="13" ry="28" cy="-24" fill="#ff8fb8" transform="rotate(216)"/>
+          <ellipse rx="13" ry="28" cy="-24" fill="#ff6b9d" transform="rotate(288)"/>
+          <circle r="14" fill="#ffc857"/>
+        </g>
+      </svg>
+      <span><b>Chatgol</b> <i>Ai</i></span>
     </div>
-
-    <div id="tab-main">
-      <div class="filters" id="filters-main">
-        <button class="filter-btn active" data-filter="all">همه</button>
-        <button class="filter-btn" data-filter="عمومی">اعداد عمومی</button>
-        <button class="filter-btn" data-filter="اعشاری">اعداد اعشاری</button>
-        <button class="filter-btn" data-filter="درصد">درصد</button>
-        <button class="filter-btn" data-filter="پول">پول و ارز</button>
-        <button class="filter-btn" data-filter="تاریخ">تاریخ</button>
-      </div>
-      <div class="cards" id="cards-main"></div>
+    <div class="by">طراح و برنامه‌نویس: <b>علی گلکاران</b></div>
+  </header>
+  <div id="msgs"><div class="wrap" id="wrap"></div></div>
+  <footer>
+    <div class="prev" id="prev"><img id="prevImg" alt=""><button id="prevX" aria-label="حذف عکس">✕</button></div>
+    <div class="routerbar"><label for="modelChoice">موتور پاسخ</label><select id="modelChoice"><option value="auto">هوشمند خودکار · اقتصادی</option><option value="openai">OpenAI</option><option value="gemini">Gemini</option><option value="anthropic">Claude</option><option value="deepseek">DeepSeek</option><option value="groq">Groq</option><option value="openrouter">OpenRouter</option></select><span id="routeStatus">آماده</span></div><div class="modes" id="modes"><button data-m="chat" class="on">💬 گفتگو</button><button data-m="code">👨‍💻 برنامه‌نویس</button><button data-m="img">🎨 ساخت تصویر</button></div>
+    <div class="box">
+      <button class="ic" id="imgBtn" aria-label="آپلود عکس">🖼</button>
+      <input type="file" id="file" accept="image/*" hidden>
+      <textarea id="inp" rows="1" placeholder="هر چی میخوای بپرس..."></textarea>
+      <button class="ic" id="stop" aria-label="توقف پاسخ" hidden>■</button><button class="ic send" id="send" aria-label="ارسال">➤</button>
     </div>
+  </footer>
+</main>
 
-    <div id="tab-new" style="display:none;">
-      <p class="section-title">کدهای پیشرفته و کاربردی‌تر (منفی، حسابداری، خلاصه‌سازی، شماره‌ها و...)</p>
-      <div class="cards" id="cards-new"></div>
-    </div>
+<dialog id="dlg">
+  <h3>تنظیمات</h3>
+  <p class="n">نسخه عمومی از درگاه امن سرور استفاده می‌کند. کلیدهای API باید فقط روی سرور باشند و هرگز در مرورگر ذخیره نشوند.</p><div class="prov"><label>آدرس درگاه API</label><input id="apiEndpoint" type="text" value="/api/chat" dir="ltr"><small>نمونه: /api/chat</small></div><div class="prov"><label>مدل پیش‌فرض</label><select id="defaultModel"><option value="auto">هوشمند اقتصادی</option><option value="openai">OpenAI</option><option value="gemini">Gemini</option><option value="anthropic">Claude</option><option value="deepseek">DeepSeek</option><option value="groq">Groq</option><option value="openrouter">OpenRouter</option></select></div><div class="row"><button id="cancel">بستن</button><button class="ok" id="save">ذخیره</button></div>
+</dialog>
 
-    <div class="tip">
-      <strong>نکته:</strong> این کدها را در بخش Format Cells → Custom (اکسل) یا Format → Number → Custom (پاورپوینت) وارد کنید. بخش <code style="direction:ltr;display:inline-block">[$-3010000]</code> وظیفه فارسی‌سازی ارقام را دارد و بقیه کد، شکل نمایش را تعیین می‌کند.
-    </div>
-  </div>
+<dialog id="pvd" class="big"><div class="row" style="margin:0 0 8px"><button id="pvx">بستن پیش‌نمایش</button></div><iframe id="pv" sandbox="allow-scripts allow-modals allow-forms" title="پیش‌نمایش"></iframe></dialog>
+<script>
+const $=s=>document.querySelector(s);
+const ld=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}};
+const sv=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch{alert('حافظه مرورگر پر است؛ چت‌های قدیمی را پاک کن.')}};
+try{localStorage.removeItem('cg_cfg')}catch{}
+let chats=ld('cg_chats',[]), cur=ld('cg_cur',null), pending=null, busy=false;
+const chat=()=>chats.find(c=>c.id===cur);
+const esc=s=>s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+let mode='chat';
+const SYS='You are Chatgol Ai, a smart, friendly and accurate assistant. Reply in the same language as the user (default Persian). Be clear and well organized.';
+const SYS_CODE='You are Chatgol Ai in expert programmer mode: a senior software engineer. Reply in the user\'s language but write code in English. Always give complete, runnable code in fenced blocks with the language tag, never truncated and never with placeholders. For web pages or games produce ONE self-contained HTML file with CSS and JS inline, modern and polished. Briefly explain the key points and how to run it. Think about edge cases and bugs before answering.';
+const SYS_IMG='Convert the user request into ONE detailed English image-generation prompt (subject, style, lighting, composition, quality keywords). Output only the prompt, nothing else.';
+const tx=m=>m.gen?'(image generated for prompt: '+m.text+')':(m.text||'این عکس را توضیح بده');
+function md(t){
+  if((t.match(/```/g)||[]).length%2)t+='\n```';
+  const bl=[];
+  t=t.replace(/```([\w+-]*)\n?([\s\S]*?)```/g,(_,l,c)=>{bl.push([l,c.replace(/\n$/,'')]);return '\u0000'+(bl.length-1)+'\u0000'});
+  t=esc(t).replace(/`([^`\n]+)`/g,'<code>$1</code>').replace(/\*\*([^*]+)\*\*/g,'<b>$1</b>').replace(/^#{1,4} (.+)$/gm,'<b>$1</b>').replace(/\n/g,'<br>');
+  return t.replace(/\u0000(\d+)\u0000/g,(_,i)=>{const[l,c]=bl[i];
+    return '<div class="cb"><div class="ch"><span>'+esc(l||'code')+'</span><span class="sp"></span>'+(/^(html|svg)$/i.test(l)?'<button data-a="run">▶ اجرا</button>':'')+'<button data-a="copy">کپی</button><button data-a="dl">دانلود</button></div><pre><code>'+esc(c)+'</code></pre></div>'});
+}
+function newChat(){const c={id:Date.now().toString(36),title:'گفتگوی جدید',msgs:[]};chats.unshift(c);cur=c.id;persist();render();$('#side').classList.remove('open')}
+function persist(){sv('cg_chats',chats);sv('cg_cur',cur)}
+function render(){
+  const l=$('#list');l.innerHTML='';
+  chats.forEach(c=>{
+    const d=document.createElement('div');d.className='item'+(c.id===cur?' on':'');
+    d.innerHTML='<span></span><button class="del" aria-label="حذف">✕</button>';
+    d.firstChild.textContent=c.title;
+    d.firstChild.onclick=()=>{cur=c.id;persist();render();$('#side').classList.remove('open')};
+    d.lastChild.onclick=()=>{chats=chats.filter(x=>x.id!==c.id);if(cur===c.id)cur=chats[0]?.id||null;persist();render()};
+    l.appendChild(d);
+  });
+  const w=$('#wrap');w.innerHTML='';const c=chat();
+  const mainEl=document.querySelector('main');
+  
+  if(!c||!c.msgs.length){
+    w.innerHTML='<div class="empty"><h2>سلام! من چت‌گلم 🌸</h2>گفتگو کن، کد کامل بخواه (حالت برنامه‌نویس)، یا از حالت «ساخت تصویر» برایت عکس بسازم. عکس هم می‌توانی بفرستی.</div>';
+    mainEl.classList.add('chat-empty');
+    return;
+  }
+  
+  mainEl.classList.remove('chat-empty');
+  c.msgs.forEach(m=>addMsg(m));
+  $('#msgs').scrollTop=1e9;
+}
+function body(m){
+  let h='';if(m.img)h+='<img src="'+m.img+'" alt="">';
+  if(m.gen)h+='<img class="gen" src="'+m.gen+'" alt="" onerror="this.alt=\'ساخت تصویر ناموفق بود؛ دوباره امتحان کن\'"><a class="dl" href="'+m.gen+'" target="_blank" rel="noopener">باز کردن در اندازه کامل و ذخیره</a><details><summary>پرامپت</summary>'+esc(m.text)+'</details>';
+  else h+=m.err?'<span class="err">'+md(m.text)+'</span>':md(m.text);
+  if(m.by)h+='<span class="tag">پاسخ از '+esc(m.by)+'</span>';
+  return h;
+}
+function addMsg(m){const d=document.createElement('div');d.className='m '+(m.role==='user'?'user':'ai');d.innerHTML=body(m);$('#wrap').appendChild(d);$('#msgs').scrollTop=1e9;return d}
+const apiSettings=ld('cg_api_settings',{endpoint:'/api/chat',model:'auto'});
+let activeRequest=null;
 
-  <div class="toast" id="toast">کپی شد ✓</div>
+// --- تابع هوشمند برای سوئیچ خودکار بین مدل‌ها ---
+async function ask(msgs,sys,on,vision){
+  const models = ['auto', 'openai', 'gemini', 'anthropic', 'deepseek', 'groq', 'openrouter'];
+  let preferred = $('#modelChoice').value || apiSettings.model || 'auto';
+  let order = [preferred, ...models.filter(m => m !== preferred)];
 
-  <script>
-    const particlesEl = document.getElementById('particles');
-    for (let i = 0; i < 18; i++) {
-      const p = document.createElement('div');
-      p.className = 'particle';
-      p.style.left = Math.random() * 100 + '%';
-      p.style.animationDelay = (Math.random() * 10) + 's';
-      p.style.animationDuration = (9 + Math.random() * 8) + 's';
-      p.style.width = p.style.height = (3 + Math.random() * 5) + 'px';
-      particlesEl.appendChild(p);
+  activeRequest=new AbortController();
+  $('#send').hidden=true;$('#stop').hidden=false;
+  let lastError = null;
+
+  for(let i=0; i<order.length; i++){
+    const currentModel = order[i];
+    try{
+      $('#routeStatus').textContent='اتصال به '+ (currentModel==='auto'?'هوشمند خودکار':currentModel) +'…';
+      
+      const payload={
+        messages:[{role:'system',content:sys},...msgs.filter(m=>!m.err).map(m=>({role:m.role,content:m.img&&vision?[{type:'text',text:tx(m)},{type:'image_url',image_url:{url:m.img}}]:tx(m)}))],
+        mode,
+        model: currentModel,
+        budget:'economy',
+        stream:true
+      };
+
+      const r=await fetch(apiSettings.endpoint||'/api/chat',{
+        method:'POST',
+        headers:{'Content-Type':'application/json','Accept':'text/event-stream, application/json'},
+        body:JSON.stringify(payload),
+        signal:activeRequest.signal
+      });
+
+      if(!r.ok){
+        const j=await r.json().catch(()=>({}));
+        throw new Error(j.error?.message||j.error||j.message||('خطای سرور '+r.status));
+      }
+
+      const ct=r.headers.get('content-type')||'';
+      if(ct.includes('application/json')){
+        const j=await r.json();
+        const answer=j.choices?.[0]?.message?.content||j.text||j.output;
+        if(!answer)throw new Error('پاسخ سرور خالی است');
+        on&&on(answer);
+        $('#routeStatus').textContent='پاسخ آماده شد ('+(j.provider||currentModel)+')';
+        return{text:answer,by:j.provider||j.model||currentModel};
+      }
+
+      if(!r.body)throw new Error('پاسخ جریانی در دسترس نیست');
+      
+      const reader=r.body.getReader(),decoder=new TextDecoder();
+      let buffer='',all='',provider=r.headers.get('x-ai-provider')||currentModel;
+      
+      while(true){
+        const {done,value}=await reader.read();
+        if(done)break;
+        buffer+=decoder.decode(value,{stream:true});
+        const lines=buffer.split(/\r?\n/);
+        buffer=lines.pop();
+        for(const line of lines){
+          if(!line.startsWith('data:'))continue;
+          const raw=line.slice(5).trim();
+          if(!raw||raw==='[DONE]')continue;
+          let j;
+          try{j=JSON.parse(raw)}catch{continue}
+          if(j.error)throw new Error(j.error.message||j.error);
+          provider=j.provider||j.model||provider;
+          const part=j.choices?.[0]?.delta?.content??j.delta?.text??j.token??'';
+          if(typeof part==='string'&&part){
+            all+=part;
+            on&&on(all);
+          }
+        }
+      }
+      if(!all)throw new Error('پاسخ جریانی خالی بود');
+      $('#routeStatus').textContent='پاسخ آماده شد ('+provider+')';
+      return{text:all,by:provider};
+
+    }catch(e){
+      if(e.name==='AbortError') throw e; // اگر کاربر متوقف کرد، متوقف شو
+      console.warn('مدل '+currentModel+' خطا داد، سوئیچ به مدل بعدی...', e);
+      lastError = e;
+      // ادامه حلقه برای امتحان مدل بعدی
     }
+  }
 
-    const mainData = [
-      { code: '0[$-3010000]', category: 'اعداد عمومی', cat: 'general', use: 'عدد صحیح ساده', example: '۱۲۳۵' },
-      { code: '#,##0[$-3010000]', category: 'اعداد عمومی', cat: 'general', use: 'عدد صحیح با جداکننده هزارگان', example: '۱,۲۳۵' },
-      { code: '#,##0.00[$-3010000]', category: 'اعداد عمومی', cat: 'general', use: 'اعشار ۲ رقمی با جداکننده هزارگان', example: '۱,۲۳۴.۵۷' },
-      { code: '0.0[$-3010000]', category: 'اعداد اعشاری', cat: 'decimal', use: 'اعشار ۱ رقمی', example: '۱۲۳۴.۶' },
-      { code: '0.00[$-3010000]', category: 'اعداد اعشاری', cat: 'decimal', use: 'اعشار ۲ رقمی', example: '۱۲۳۴.۵۷' },
-      { code: '0.000[$-3010000]', category: 'اعداد اعشاری', cat: 'decimal', use: 'اعشار ۳ رقمی', example: '۱۲۳۴.۵۶۷' },
-      { code: '0.0000[$-3010000]', category: 'اعداد اعشاری', cat: 'decimal', use: 'اعشار ۴ رقمی', example: '۱۲۳۴.۵۶۷۸' },
-      { code: '0%[$-3010000]', category: 'درصد', cat: 'percent', use: 'درصد بدون اعشار', example: '۱۲۳٪' },
-      { code: '0.0%[$-3010000]', category: 'درصد', cat: 'percent', use: 'درصد با ۱ رقم اعشار', example: '۱۲۳.۵٪' },
-      { code: '0.00%[$-3010000]', category: 'درصد', cat: 'percent', use: 'درصد با ۲ رقم اعشار', example: '۱۲۳.۴۶٪' },
-      { code: '#,##0%[$-3010000]', category: 'درصد', cat: 'percent', use: 'درصد با جداکننده هزارگان', example: '۱۲۳,۴۵۷٪' },
-      { code: '#,##0" ریال"[$-3010000]', category: 'پول و ارز', cat: 'currency', use: 'عدد با واحد ریال', example: '۱,۲۳۵ ریال' },
-      { code: '#,##0" تومان"[$-3010000]', category: 'پول و ارز', cat: 'currency', use: 'عدد با واحد تومان', example: '۱,۲۳۵ تومان' },
-      { code: '#,##0.00" دلار"[$-3010000]', category: 'پول و ارز', cat: 'currency', use: 'عدد اعشاری با واحد دلار', example: '۱,۲۳۴.۵۷ دلار' },
-      { code: '[$-fa-ir,16]yyyy/mm/dd', category: 'تاریخ', cat: 'date', use: 'تاریخ شمسی عددی', example: '۱۴۰۳/۰۸/۱۵' },
-      { code: '[$-fa-ir,16]d mmmm yyyy', category: 'تاریخ', cat: 'date', use: 'تاریخ شمسی با نام ماه', example: '۱۵ آبان ۱۴۰۳' },
-      { code: '[$-fa-ir,16]dddd d mmmm yyyy', category: 'تاریخ', cat: 'date', use: 'تاریخ شمسی با نام روز', example: 'سه‌شنبه ۱۵ آبان ۱۴۰۳' }
-    ];
+  // اگر همه مدل‌ها خطا دادند
+  $('#routeStatus').textContent='خطا در اتصال به همه مدل‌ها';
+  throw new Error('سیستم‌های هوش مصنوعی در حال حاضر پاسخگو نیستند. لطفاً اینترنت یا تنظیمات API خود را بررسی کنید.');
+}
 
-    const newData = [
-      { code: '[Red]-0[$-3010000]', category: 'پیشرفته', cat: 'advanced', use: 'عدد منفی به رنگ قرمز', example: '-۱۲۳۵ (قرمز)' },
-      { code: '[Red]-#,##0[$-3010000]', category: 'پیشرفته', cat: 'advanced', use: 'منفی قرمز با جداکننده هزارگان', example: '-۱,۲۳۵ (قرمز)' },
-      { code: '[Red]-0.00%[$-3010000]', category: 'پیشرفته', cat: 'advanced', use: 'درصد منفی به رنگ قرمز', example: '-۱۲.۳۴٪ (قرمز)' },
-      { code: '#,##0.00;[Red](#,##0.00)[$-3010000];"-"', category: 'پیشرفته', cat: 'advanced', use: 'قالب حسابداری (منفی در پرانتز، صفر به صورت خط تیره)', example: '(۱,۲۳۴.۵۰)' },
-      { code: '0.00E+00[$-3010000]', category: 'پیشرفته', cat: 'advanced', use: 'نماد علمی (Scientific)', example: '۱.۲۳E+۰۳' },
-      { code: '# ?/?[$-3010000]', category: 'پیشرفته', cat: 'advanced', use: 'نمایش کسری', example: '۱ ۱/۲' },
-      { code: '#,##0,," میلیون"[$-3010000]', category: 'پیشرفته', cat: 'advanced', use: 'خلاصه‌سازی به میلیون', example: '۱.۵ میلیون' },
-      { code: '#,##0," هزار"[$-3010000]', category: 'پیشرفته', cat: 'advanced', use: 'خلاصه‌سازی به هزار', example: '۱.۲ هزار' },
-      { code: '0000000000[$-3010000]', category: 'کد جدید', cat: 'new', use: 'کد ملی ۱۰ رقمی (با صفرهای ابتدایی)', example: '۰۰۱۲۳۴۵۶۷۸' },
-      { code: '0##########[$-3010000]', category: 'کد جدید', cat: 'new', use: 'شماره موبایل با صفر اول', example: '۰۹۱۲۳۴۵۶۷۸۹' },
-      { code: '0000[$-3010000]', category: 'کد جدید', cat: 'new', use: 'کد ۴ رقمی (مثل کد پستی کوتاه)', example: '۰۰۴۲' },
-      { code: '[$-fa-ir,16]yyyy/mm/dd hh:mm', category: 'تاریخ جدید', cat: 'date', use: 'تاریخ و ساعت شمسی', example: '۱۴۰۳/۰۸/۱۵ ۱۴:۳۰' },
-      { code: '[$-fa-ir,16]mmmm', category: 'تاریخ جدید', cat: 'date', use: 'نام ماه شمسی', example: 'آبان' },
-      { code: '[$-fa-ir,16]dddd', category: 'تاریخ جدید', cat: 'date', use: 'نام روز هفته', example: 'سه‌شنبه' }
-    ];
-
-    const toast = document.getElementById('toast');
-
-    function renderCards(containerId, data, filter = 'all') {
-      const el = document.getElementById(containerId);
-      el.innerHTML = '';
-      const filtered = filter === 'all' ? data : data.filter(item => item.category.includes(filter));
-
-      filtered.forEach((item, i) => {
-        const card = document.createElement('div');
-        card.className = `card cat-${item.cat}`;
-        card.innerHTML = `
-          <div class="card-info">
-            <div class="card-top">
-              <span class="category">${item.category}</span>
-              <span class="use">${item.use}</span>
-            </div>
-            <div class="example">${item.example}</div>
-            <div class="code-box">${item.code}</div>
-          </div>
-          <div class="actions">
-            <button class="copy-btn" onclick="copyCode(this, \`${item.code}\`)">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-              </svg>
-              کپی
-            </button>
-          </div>
-        `;
-        el.appendChild(card);
-        setTimeout(() => card.classList.add('visible'), 50 + i * 55);
-      });
+async function send(){
+  if(busy)return;const text=$('#inp').value.trim();if(!text&&!(pending&&mode!=='img'))return;
+  if(!chat())newChat();const c=chat();
+  const um={role:'user',text,img:mode==='img'?null:pending};c.msgs.push(um);
+  if(c.title==='گفتگوی جدید')c.title=(text||'عکس').slice(0,32);
+  $('#inp').value='';$('#inp').style.height='auto';clearImg();
+  if(c.msgs.length===1)render();else addMsg(um);
+  busy=true;const el=addMsg({role:'assistant',text:''});
+  el.innerHTML='<span class="dots"><span></span><span></span><span></span></span>'+(mode==='img'?' در حال ساخت تصویر...':'');
+  try{
+    if(mode==='img'){
+      let ep=text;try{ep=(await Promise.race([ask([{role:'user',text}],SYS_IMG,null,false),new Promise((_,r)=>setTimeout(r,6000))])).text.trim()}catch{}
+      const url='https://image.pollinations.ai/prompt/'+encodeURIComponent(ep)+'?width=1024&height=1024&model=flux&nologo=true&seed='+Math.floor(Math.random()*1e6);
+      c.msgs.push({role:'assistant',text:ep,gen:url,by:'Pollinations Flux'});
+    }else{
+      let h=c.msgs.slice(-20);while(h[0]&&h[0].role!=='user')h.shift();
+      const r=await ask(h,mode==='code'?SYS_CODE:SYS,t=>{el.innerHTML=md(t);$('#msgs').scrollTop=1e9},!!um.img);
+      c.msgs.push({role:'assistant',text:r.text,by:r.by});
     }
-
-    function copyCode(btn, code) {
-      navigator.clipboard.writeText(code).then(() => {
-        btn.classList.add('copied');
-        btn.innerHTML = `
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <polyline points="20 6 9 17 4 12"></polyline>
-          </svg>
-          کپی شد
-        `;
-        toast.classList.add('show');
-        setTimeout(() => {
-          toast.classList.remove('show');
-          btn.classList.remove('copied');
-          btn.innerHTML = `
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-            </svg>
-            کپی
-          `;
-        }, 1700);
-      });
+  }catch(e){
+    if(e.name==='AbortError'){
+      c.msgs.push({role:'assistant',err:1,text:'پاسخ متوقف شد.'});
+    }else{
+      // نمایش خطای دوستانه به جای ارور خام
+      c.msgs.push({role:'assistant',err:1,text:'⚠️ متأسفانه در حال حاضر ارتباط با تمام مدل‌های هوش مصنوعی برقرار نشد. لطفاً دوباره تلاش کنید.'});
     }
+  }
+  busy=false;persist();render();
+}
 
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        const tab = btn.dataset.tab;
-        document.getElementById('tab-main').style.display = tab === 'main' ? 'block' : 'none';
-        document.getElementById('tab-new').style.display = tab === 'new' ? 'block' : 'none';
-        if (tab === 'new') renderCards('cards-new', newData);
-      });
-    });
+$('#wrap').addEventListener('click',e=>{
+  const b=e.target.closest('button[data-a]');if(!b)return;
+  const cb=b.closest('.cb'),code=cb.querySelector('code').textContent,lang=cb.querySelector('.ch span').textContent.toLowerCase(),a=b.dataset.a;
+  if(a==='copy'){navigator.clipboard.writeText(code);b.textContent='کپی شد ✓';setTimeout(()=>b.textContent='کپی',1500)}
+  else if(a==='dl'){const ext={javascript:'js',js:'js',python:'py',py:'py',html:'html',css:'css',json:'json',typescript:'ts',ts:'ts',java:'java',cpp:'cpp',c:'c',bash:'sh',sh:'sh',svg:'svg',php:'php',go:'go',rust:'rs'}[lang]||'txt';
+    const x=document.createElement('a');x.href=URL.createObjectURL(new Blob([code]));x.download='chatgol.'+ext;x.click()}
+  else{$('#pv').srcdoc=code;$('#pvd').showModal()}
+});
 
-    document.querySelectorAll('#filters-main .filter-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('#filters-main .filter-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        renderCards('cards-main', mainData, btn.dataset.filter);
-      });
-    });
+// --- بک‌گراند با تعداد خطوط نصف ---
+(()=>{
+const cv=$('#bg'),x=cv.getContext('2d');let W,H,D,t=0;
+const L=[{c:'255,107,157',a:.5,f:.0014,s:.55,h:.58,p:0,m:.11},{c:'176,76,255',a:.45,f:.0019,s:.4,h:.5,p:2,m:.09},{c:'255,200,87',a:.28,f:.0011,s:.7,h:.68,p:4,m:.13},{c:'122,224,176',a:.22,f:.0024,s:.3,h:.44,p:1,m:.07}];
+function rs(){D=Math.min(devicePixelRatio||1,innerWidth<760?1:1.5);W=cv.width=innerWidth*D;H=cv.height=innerHeight*D}
+function draw(){
+  x.clearRect(0,0,W,H);const am=document.documentElement.dataset.theme==='light'?.6:1;
+  for(const l of L){
+    // تغییر k<4 به k<2 برای نصف شدن خطوط
+    for(let k=0;k<2;k++){
+      x.beginPath();
+      for(let i=0;i<=W+16;i+=16){
+        const u=i*l.f/D,y=H*l.h+Math.sin(u+t*l.s+l.p+k*.35)*H*l.m+Math.sin(u*2.3-t*l.s*1.4+k*.2)*H*l.m*.4+k*H*.012;
+        i?x.lineTo(i,y):x.moveTo(i,y);
+      }
+      x.strokeStyle='rgba('+l.c+','+(l.a*am*(1-k*.22))+')';x.lineWidth=(k?1:2.2)*D;x.stroke();
+    }
+  }
+}
+const calm=matchMedia('(prefers-reduced-motion:reduce)').matches;
+function loop(){if(!document.hidden){t+=.014;draw()}requestAnimationFrame(loop)}
+rs();addEventListener('resize',()=>{rs();draw()});
+window.__bg=draw;calm?draw():loop();
+})();
 
-    renderCards('cards-main', mainData);
-  </script>
+function setTheme(t){document.documentElement.dataset.theme=t;try{localStorage.setItem('cg_theme',t)}catch{}$('#theme').textContent=t==='light'?'🌙':'☀️';window.__bg&&window.__bg()}
+$('#theme').onclick=()=>setTheme(document.documentElement.dataset.theme==='light'?'dark':'light');
+$('#theme').textContent=document.documentElement.dataset.theme==='light'?'🌙':'☀️';
+$('#pvx').onclick=()=>{$('#pvd').close();$('#pv').srcdoc=''};
+document.querySelectorAll('#modes button').forEach(b=>b.onclick=()=>{
+  mode=b.dataset.m;document.querySelectorAll('#modes button').forEach(x=>x.classList.toggle('on',x===b));
+  $('#inp').placeholder={chat:'هر چی میخوای بپرس...',code:'چه برنامه‌ای بسازم؟ مثلاً: یک بازی مار با HTML',img:'تصویر را توصیف کن، مثلاً: گربه‌ای فضانورد روی ماه'}[mode];
+  $('#imgBtn').style.display=mode==='img'?'none':'';if(mode==='img')clearImg();
+});
+function clearImg(){pending=null;$('#prev').style.display='none';$('#file').value=''}
+$('#imgBtn').onclick=()=>$('#file').click();
+$('#prevX').onclick=clearImg;
+$('#file').onchange=e=>{
+  const f=e.target.files[0];if(!f)return;const img=new Image();
+  img.onload=()=>{const s=Math.min(1,1024/Math.max(img.width,img.height)),cv=document.createElement('canvas');
+    cv.width=img.width*s;cv.height=img.height*s;cv.getContext('2d').drawImage(img,0,0,cv.width,cv.height);
+    pending=cv.toDataURL('image/jpeg',.8);$('#prevImg').src=pending;$('#prev').style.display='block'};
+  img.src=URL.createObjectURL(f);
+};
+$('#send').onclick=send;
+$('#inp').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}});
+$('#inp').addEventListener('input',e=>{e.target.style.height='auto';e.target.style.height=e.target.scrollHeight+'px'});
+$('#newBtn').onclick=newChat;
+document.addEventListener('click',e=>{const sd=$('#side');if(sd.classList.contains('open')&&!sd.contains(e.target)&&e.target!==$('#menu'))sd.classList.remove('open')});
+$('#menu').onclick=()=>$('#side').classList.toggle('open');
+$('#modelChoice').value=apiSettings.model||'auto';
+$('#modelChoice').onchange=()=>{apiSettings.model=$('#modelChoice').value;sv('cg_api_settings',apiSettings)};
+$('#setBtn').onclick=()=>{$('#apiEndpoint').value=apiSettings.endpoint||'/api/chat';$('#defaultModel').value=apiSettings.model||'auto';$('#dlg').showModal()};
+$('#cancel').onclick=()=>$('#dlg').close();
+$('#save').onclick=()=>{const endpoint=$('#apiEndpoint').value.trim();if(!endpoint){alert('آدرس API را وارد کن.');return}apiSettings.endpoint=endpoint;apiSettings.model=$('#defaultModel').value;$('#modelChoice').value=apiSettings.model;sv('cg_api_settings',apiSettings);$('#dlg').close()};
+$('#stop').onclick=()=>{if(activeRequest)activeRequest.abort()};
+if(!chats.length)newChat();else{if(!chat())cur=chats[0].id;render()}
+</script>
 </body>
 </html>
